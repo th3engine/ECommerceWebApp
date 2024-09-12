@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% set active_page='Catalogue' %}
+
+{% block content %}
+    <div class="album py-5 bg-body-tertiary">
+    <div class="container"> 
+      {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+          <div class=flashes>
+          {% for category, message in messages %}
+          <small class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-{{category}}-emphasis bg-{{category}}-subtle border border-{{category}}-subtle rounded-2">{{message}}</small>
+          {% endfor %}
+          </div>
+          {% endif %}
+      {% endwith %}   
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      {% for fragrance in fragrances  %}
+        <div class="col" id="{{fragrance.id}}">
+          <div class="card shadow-sm">
+            <img class="bd-placeholder-img card-img-top" src="{{fragrance.img_url}}" alt="Cafe Image" aria-label="Placeholder: Thumbnail" title="Placeholder" style="max-width: min-content; max-height: min-content;">
+            <div class="card-body">
+              <p class="card-text">{{fragrance.name}}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a href="{{url_for('Home.product',product_id=fragrance.id)}}" role="button" class="btn btn-sm btn-outline-secondary">View</a>
+                  <a href="{{url_for('Home.add_to_basket',product_id=fragrance.id)}}" role="button" class="btn btn-sm btn-outline-secondary">Cart 🛒</a>
+                </div>
+                <small class="text-body-secondary">{{fragrance.brand}}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+    </div>
+{% endblock content %}

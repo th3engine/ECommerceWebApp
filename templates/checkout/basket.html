@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="text-center"> Basket Items 🌺</h1>
+<hr>
+<div class="container">
+{% if session.get("Cart") %}
+<div class="table-responsive-md">
+<form method="post" action="{{url_for('Checkout.update_basket')}}">
+<table class="table justify-content-center">
+  <thead>
+    <tr>
+      <th scope="col">Item</th>
+      <th scope="col">Price</th>
+      <th scope="col">Qty</th>
+      <th scope="col">Subtotal</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for fragrance in fragrances  %}
+    <tr>
+      <th scope="row">
+      <a class="text-decoration-none" href="{{url_for('Home.product',product_id=fragrance.id)}}">
+        <h3 class="text-white"><img class="rounded-circle flex-shrink-0" width="150" height="150" src="{{fragrance.img_url}}"><span class="px-5"> {{fragrance.brand}} {{fragrance.name}} </span></h3>
+        </a>
+      </th>
+      <td><h5 class="pt-5">£{{fragrance.price}}</h5></td>
+      <td>
+      <div class="pt-5">
+        <input class="form-control form-control-sm w-75" type="number" name="{{fragrance.id}}" id="quantity" value="{{session.get('Cart')[fragrance.id|string].qty}}" min="0">
+      </div>
+      </td>
+      <td><h5 class="pt-5">£{{fragrance.price|int * session.get("Cart")[fragrance.id|string].qty|int}}</h5></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  </table>
+  <button class="btn btn-primary" type="submit">Update basket</button>
+  <a type="button" class="btn btn-success mx-1" href="{{url_for('Checkout.checkout_basket')}}">Proceed to checkout</a>
+</form>
+</div>
+    {% else %}
+    {% endif %}
+</div>
+
+{% endblock content %}

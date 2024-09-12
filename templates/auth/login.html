@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block content %}
+
+<hr>
+<main class="container-fluid pt-5 w-50">
+    <div class="row col-lg-8 col-md-10 m-auto">
+          <h1 class="display-8 fw-bold text-body-emphasis lh-1 mb-3 lead">Please sign in ♥︎</h1>
+          {{ render_form(form,novalidate=True)}}
+        </div>
+</main>
+
+{% endblock content %}

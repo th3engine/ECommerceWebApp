@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% set active_page='none' %}
+
+{% block content %}
+<h1 class="text-center">Hello {{current_user.name}} 😀 </h1>
+<hr>
+<div class="container">
+<a type="button" class="btn btn-danger" href="{{url_for('Auth.logout')}}"> Logout</a>
+</div>
+{% endblock content %}
