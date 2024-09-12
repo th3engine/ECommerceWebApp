@@ -16,7 +16,7 @@ def login():
         user = db.session.execute(db.select(Users).where(Users.email == form.email.data)).scalar()
         if user and check_password_hash(user.password,form.password.data):
             login_user(user)
-            next = request.args.get('next')
+            next = request.args.get('next','none')
             try:
                 next = url_for(next)
             except BuildError:

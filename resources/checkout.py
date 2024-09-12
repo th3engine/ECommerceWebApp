@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, session, request, abort
+from flask_login import current_user, login_required
 from db import db, Fragrances
-import stripe, os
+import stripe, os, uuid
 
 stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
@@ -32,6 +33,7 @@ def update_basket():
         return redirect(url_for('Checkout.basket'))
     
 @bp.route('/checkout')
+@login_required
 def checkout_basket():
     line_items = []
     cart = session.get("Cart")
@@ -54,6 +56,7 @@ def checkout_basket():
         line_items=line_items,
         payment_method_types=['card'],
         mode='payment',
+        customer_email=current_user.email,
         success_url=url_for('Checkout.success',_external=True),
         cancel_url=url_for('Checkout.cancel',_external=True)
     )
@@ -63,6 +66,9 @@ def checkout_basket():
 @bp.route('/checkout/<int:product_id>/<int:qty>')
 def checkout_item(product_id,qty):
     product = db.get_or_404(Fragrances,product_id)
+    email = None
+    if current_user.is_authenticated:
+        email = current_user.email
     checkout_session = stripe.checkout.Session.create(
         line_items=[{
             'price_data':{
@@ -74,6 +80,7 @@ def checkout_item(product_id,qty):
             },
             'quantity':qty,
         }],
+        customer_email=email,
         payment_method_types=['card'],
         mode='payment',
         success_url=url_for('Checkout.success',_external=True),
@@ -84,8 +91,12 @@ def checkout_item(product_id,qty):
 
 @bp.route('/success')
 def success():
-    del session['Cart']
-    return render_template('checkout/success.html')
+    order_number = str(uuid.uuid4())
+    try:
+        del session['Cart']
+    except KeyError:
+        pass
+    return render_template('checkout/success.html',order_number=order_number)
 
 @bp.route('/cancel')
 def cancel():
