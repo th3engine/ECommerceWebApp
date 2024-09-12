@@ -18,12 +18,13 @@ class Users(UserMixin,db.Model):
     name: Mapped[str] = mapped_column(String(250),nullable=False)
     email: Mapped[str] = mapped_column(String(250),nullable=False)
     password: Mapped[str] = mapped_column(String(1000),nullable=False)
-    created_on: Mapped[datetime] = mapped_column(DateTime,nullable=False,server_default=func.now())
+    created_on: Mapped[datetime] = mapped_column(DateTime,nullable=False,default=func.now())
     confirmed: Mapped[bool] = mapped_column(Boolean,nullable=False,default=False)
     confirmed_on: Mapped[datetime] = mapped_column(DateTime,nullable=True)
 
     def __str__(self) -> str:
         return f"User ID: {self.id}, Name: {self.name}"
+
     
 @event.listens_for(Users.password,'set',retval=True)
 def hash_user_password(target,value,oldvalue,initiator):

@@ -5,6 +5,15 @@
 <section class="py-5">
   <div class="container">
     <div class="row gx-5">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+          <div class=flashes>
+          {% for category, message in messages %}
+          <small class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-{{category}}-emphasis bg-{{category}}-subtle border border-{{category}}-subtle rounded-2">{{message}}</small>
+          {% endfor %}
+          </div>
+          {% endif %}
+      {% endwith %}  
       <aside class="col-lg-6">
         <div class="border rounded-4 mb-3 d-flex justify-content-center">
           <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="{{fragrance.img_url}}">

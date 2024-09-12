@@ -4,8 +4,17 @@
 {% block content %}
 
 <hr>
-<main class="container-fluid pt-5 w-50">
+<main class="container-fluid pt-5 w-50"> 
     <div class="row col-lg-8 col-md-10 m-auto">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+              <div class=flashes>
+              {% for category, message in messages %}
+              <small class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-{{category}}-emphasis bg-{{category}}-subtle border border-{{category}}-subtle rounded-2">{{message}}</small>
+              {% endfor %}
+              </div>
+              {% endif %}
+          {% endwith %}      
           <h1 class="display-8 fw-bold text-body-emphasis lh-1 mb-3 lead">Please sign in ♥︎</h1>
           {{ render_form(form,novalidate=True)}}
         </div>

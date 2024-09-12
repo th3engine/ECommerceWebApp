@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, session, Response
+from flask import Blueprint, render_template, redirect, url_for, flash, session
 from db import db, Fragrances
 from forms import ProductInput
 
@@ -47,7 +47,7 @@ def add_to_basket(product_id,qty):
             product_id:dict(name=fragrance.name,img=fragrance.img_url,qty=1)
             }
     session["Cart"] = cart
-
+    flash(f"{fragrance.name} - {qty} added to basket","light")
     return redirect(session.pop('next',None) or f"{url_for('Home.catalogue')}#{fragrance.id}")
 
 
