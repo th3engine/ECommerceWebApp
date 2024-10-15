@@ -3,7 +3,7 @@ from flask_bootstrap import Bootstrap5
 from flask_login import LoginManager
 from config import Config
 
-from db import db, Users, Fragrances
+from db import db, Users
 from flask_migrate import Migrate
 
 from resources import Home, Auth, Profile, admin, Checkout
